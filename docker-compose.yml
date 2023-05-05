@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  web:
+    build: 
+      context: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./src:/code
+    ports:
+      - "8000:8000"
+    env_file: 
+      - .env
+    depends_on:
+      - db
+    networks:
+      - ml-net
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - ml-net
+
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./sys/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - web
+    networks:
+      - ml-net
+
+networks:
+  ml-net:
+    driver: bridge
+
+
+
+
