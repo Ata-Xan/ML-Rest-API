@@ -9,6 +9,10 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Install apt-utils
+          command: sudo apt-get update && sudo apt-get install -y --no-install-recommends apt-utils
+
       - setup_remote_docker: 
           version: 20.10.7
 
