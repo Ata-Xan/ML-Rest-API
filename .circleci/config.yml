@@ -2,7 +2,7 @@ version: 2.1
 executors:
   docker-executor:
     docker:
-      - image: python:3.9
+      - image: circleci/python:3.9-buster
 
 jobs:
   build:
@@ -15,12 +15,6 @@ jobs:
 
       - setup_remote_docker:
           version: 20.10.7
-
-      - run:
-          name: Install apt-utils
-          command: |
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq --no-install-recommends apt-utils
 
       - run:
           name: Install dependencies
