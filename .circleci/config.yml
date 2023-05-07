@@ -2,7 +2,7 @@ version: 2.1
 executors:
   docker-executor:
     docker:
-      - image:  cimg/python:3.11.3
+      - image: circleci/python:3.9-buster
 
 jobs:
   build:
@@ -19,6 +19,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
+            sudo apt-get update
+            sudo apt-get install -y --no-install-recommends apt-utils
+
             python3 -m venv venv
             source venv/bin/activate
             pip install -r requirements.txt
