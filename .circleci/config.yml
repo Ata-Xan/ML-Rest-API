@@ -110,10 +110,10 @@ jobs:
           name: Install apt-utils
           command: sudo apt-get update && sudo apt-get install -y apt-utils
       
-      - run:
-          name: Start PostgreSQL container
-          command: |
-            docker run -d --name postgres-container -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -p 5432:5432 postgres:14
+      # - run:
+      #     name: Start PostgreSQL container
+      #     command: |
+      #       docker run -d --name postgres-container -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -p 5432:5432 postgres:14
 
       - restore_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
