@@ -125,7 +125,7 @@ jobs:
           name: Run database migrations
           command: |
             . venv/bin/activate
-            python3 manage.py migrate
+            python3 src/manage.py migrate
         
       - run:
           name: Running tests
