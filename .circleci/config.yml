@@ -7,6 +7,8 @@ jobs:
       DB_NAME: 'test_ml_project'
       DB_USER: 'test_ml'
       DB_PASSWORD: '1234567'
+      DB_HOST: 'localhost'
+      DB_PORT: '5432'
 
     docker:
       - image: cimg/python:3.11.3
@@ -35,10 +37,9 @@ jobs:
             sudo apt-get install -y postgresql-client
 
             # Set up database
-            psql -c "CREATE DATABASE $DB_NAME;" -U postgres
-            psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';" -U postgres
-            psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;" -U postgres
-
+            psql -h $DB_HOST -p $DB_PORT -c "CREATE DATABASE $DB_NAME;" -U postgres
+            psql -h $DB_HOST -p $DB_PORT -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';" -U postgres
+            psql -h $DB_HOST -p $DB_PORT -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;" -U postgres
       - run:
           name: Running tests
           command: |
