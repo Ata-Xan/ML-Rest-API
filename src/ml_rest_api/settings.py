@@ -69,7 +69,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ml_rest_api.wsgi.application'
-
+TEST_DATABASE_PREFIX = 'test_'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -82,6 +82,14 @@ DATABASES = {
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': 'db',
         'PORT': 5432,
+    },
+    'test': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ml_project',  # Make sure this value is set correctly
+        'USER': 'test',
+        'PASSWORD': '1234567',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
