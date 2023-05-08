@@ -2,16 +2,19 @@ version: 2
 jobs:
 
   build:
-    environment:
-      DJANGO_SECRET_KEY: 'hof@xh$dz#p!#czh53r#t^2t)ydmtkqgy+*_kf=58)8(oz1n)^'
-      DB_NAME: 'test_ml_project'
-      DB_USER: 'test_ml'
-      DB_PASSWORD: '1234567'
-      DB_HOST: 127.0.0.1
-      DB_PORT: '5432'
+    # environment:
+    #   DJANGO_SECRET_KEY: 'hof@xh$dz#p!#czh53r#t^2t)ydmtkqgy+*_kf=58)8(oz1n)^'
+    #   DB_NAME: 'test_ml_project'
+    #   DB_USER: 'test_ml'
+    #   DB_PASSWORD: '1234567'
+    #   DB_HOST: 127.0.0.1
+    #   DB_PORT: '5432'
 
     docker:
       - image: cimg/python:3.11.3
+        environment:
+          POSTGRES_USER: 'test_ml'
+          POSTGRES_PASSWORD: '1234567'
     
     services:
       - postgres
@@ -39,7 +42,7 @@ jobs:
       - run:
           name: Start PostgreSQL service
           command: |
-            service postgresql start
+            docker run -d --name postgres-db -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5432:5432 postgres:14
             sleep 5  # Wait for PostgreSQL to start
       
       - run:
