@@ -12,20 +12,25 @@ jobs:
 
     docker:
       - image: cimg/python:3.11.3
-      - image: cimg/postgres:15.2.0
-
         environment:
-          POSTGRES_USER: 'test_ml'
-          POSTGRES_PASSWORD: '1234567'
-          POSTGRES_DB: 'test_ml_project'
-    
-    services:
-      - postgres
+          ENV: CIRCLE
+          DATABASE_URL: postgresql://circleci@localhost/circle_test
+
+      - image: cimg/postgres:15.2.0
+        environment:
+          PGHOST: localhost
+          PGUSER: circleci
+          POSTGRES_USER: circleci
+          POSTGRES_DB: circle_test
+          POSTGRES_HOST_AUTH_METHOD: trust
 
     steps:
       - checkout
-
-      - run: python --version
+      - python/load-cache
+      
+      - run:
+          name: Wait for db to run
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
 
       - run:
           name: Install apt-utils
