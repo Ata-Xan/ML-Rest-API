@@ -93,12 +93,12 @@ jobs:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
 
-    services:
-      - name: postgres
-        environment:
-          POSTGRES_USER: myuser
-          POSTGRES_PASSWORD: mypassword
-          POSTGRES_DB: mydatabase
+    # services:
+    #   - name: postgres
+    #     environment:
+    #       POSTGRES_USER: myuser
+    #       POSTGRES_PASSWORD: mypassword
+    #       POSTGRES_DB: mydatabase
 
     steps:
       - checkout
@@ -139,6 +139,13 @@ jobs:
       - store_artifacts:
           path: test-reports/
           destination: python_app
+          
+    services:
+      - name: postgres
+        environment:
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          POSTGRES_DB: mydatabase
       
 
 
