@@ -122,11 +122,17 @@ jobs:
           paths:
             - "venv"
       - run:
+          name: Run database migrations
+          command: |
+            . venv/bin/activate
+            python3 manage.py migrate
+        
+      - run:
           name: Running tests
           command: |
             . venv/bin/activate
             python3 src/manage.py test
-            
+
       - store_artifacts:
           path: test-reports/
           destination: python_app
