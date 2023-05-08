@@ -94,6 +94,8 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
       - run: sudo apt-get update
       - run: sudo apt-get install postgresql-client
 
