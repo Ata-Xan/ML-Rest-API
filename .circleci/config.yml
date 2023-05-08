@@ -7,7 +7,7 @@ jobs:
       DB_NAME: 'test_ml_project'
       DB_USER: 'test_ml'
       DB_PASSWORD: '1234567'
-      DB_HOST: 'localhost'
+      DB_HOST: 127.0.0.1
       DB_PORT: '5432'
 
     docker:
