@@ -1,76 +1,113 @@
-version: 2
+# version: 2
+# jobs:
+#   build:
+    
+#     # environment:
+#     #   DJANGO_SECRET_KEY: 'hof@xh$dz#p!#czh53r#t^2t)ydmtkqgy+*_kf=58)8(oz1n)^'
+#     #   DB_NAME: 'test_ml_project'
+#     #   DB_USER: 'test_ml'
+#     #   DB_PASSWORD: '1234567'
+#     #   DB_HOST: 127.0.0.1
+#     #   DB_PORT: '5432'
+
+#     docker:
+#       - image: cimg/python:3.11.3
+#         environment:
+#           ENV: CIRCLE
+#           DATABASE_URL: postgresql://circleci@localhost/circle_test
+
+#       - image: circleci/postgres
+#         environment:
+#           PGHOST: localhost
+#           PGUSER: circleci
+#           DB_USER: circleci
+#           DB_PASSWORD: '1234567'
+#           DB_NAME: circle_test
+#           POSTGRES_HOST_AUTH_METHOD: trust
+#           DB_HOST: 127.0.0.1
+#           DB_PORT: '5432'
+
+#     steps:
+#       - checkout
+
+#       - run:
+#           name: Wait for db to run
+#           command: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+#       - run:
+#           name: Install apt-utils
+#           command: sudo apt-get update && sudo apt-get install -y apt-utils
+
+#       - restore_cache:
+#           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
+
+#       - run:
+#           name: Install dependencies
+#           command: |
+#             python3 -m venv venv
+#             . venv/bin/activate
+#             pip install --upgrade pip
+#             pip install -r requirements.txt
+      
+#       # - run:
+#       #     name: Start PostgreSQL service
+#       #     command: |
+#       #       docker run -d --name postgres-db -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5432:5432 postgres:14
+#       #       sleep 5  # Wait for PostgreSQL to start
+      
+#       - run:
+#           name: Set up environment
+#           command: |
+#             # Install PostgreSQL client
+#             sudo apt-get install -y postgresql-client
+
+#             # Set up database
+#             psql -h $DB_HOST -p $DB_PORT -c "CREATE DATABASE $DB_NAME;" -U postgres
+#             psql -h $DB_HOST -p $DB_PORT -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';" -U postgres
+#             psql -h $DB_HOST -p $DB_PORT -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;" -U postgres
+#       - run:
+#           name: Running tests
+#           command: |
+#             . venv/bin/activate
+#             python3 src/manage.py test
+
+#       - store_artifacts:
+#           path: test-reports/
+#           destination: python_app
+
+
+version: 2.1
+
 jobs:
   build:
-    
-    # environment:
-    #   DJANGO_SECRET_KEY: 'hof@xh$dz#p!#czh53r#t^2t)ydmtkqgy+*_kf=58)8(oz1n)^'
-    #   DB_NAME: 'test_ml_project'
-    #   DB_USER: 'test_ml'
-    #   DB_PASSWORD: '1234567'
-    #   DB_HOST: 127.0.0.1
-    #   DB_PORT: '5432'
 
+    # Primary container image where all commands run
     docker:
-      - image: cimg/python:3.11.3
+      - image: cimg/python:3.10
         environment:
-          ENV: CIRCLE
-          DATABASE_URL: postgresql://circleci@localhost/circle_test
+          TEST_DATABASE_URL: postgresql://postgres@localhost/circle_test
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
 
-      - image: circleci/postgres
+    # Service container image
+      - image: cimg/postgres:14.0
         environment:
-          PGHOST: localhost
-          PGUSER: circleci
-          DB_USER: circleci
-          DB_PASSWORD: '1234567'
-          DB_NAME: circle_test
-          POSTGRES_HOST_AUTH_METHOD: trust
-          DB_HOST: 127.0.0.1
-          DB_PORT: '5432'
+          POSTGRES_USER: postgres
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
 
     steps:
       - checkout
-
-      - run:
-          name: Wait for db to run
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
-
-      - run:
-          name: Install apt-utils
-          command: sudo apt-get update && sudo apt-get install -y apt-utils
-
-      - restore_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
-
-      - run:
-          name: Install dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install --upgrade pip
-            pip install -r requirements.txt
-      
-      # - run:
-      #     name: Start PostgreSQL service
-      #     command: |
-      #       docker run -d --name postgres-db -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5432:5432 postgres:14
-      #       sleep 5  # Wait for PostgreSQL to start
-      
-      - run:
-          name: Set up environment
-          command: |
-            # Install PostgreSQL client
-            sudo apt-get install -y postgresql-client
-
-            # Set up database
-            psql -h $DB_HOST -p $DB_PORT -c "CREATE DATABASE $DB_NAME;" -U postgres
-            psql -h $DB_HOST -p $DB_PORT -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';" -U postgres
-            psql -h $DB_HOST -p $DB_PORT -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;" -U postgres
-      - run:
-          name: Running tests
-          command: |
-            . venv/bin/activate
-            python3 src/manage.py test
-
-      - store_artifacts:
-          path: test-reports/
-          destination: python_app
+      - run: sudo apt-get update
+      - run: sudo apt-get install postgresql-client
+      - run: whoami
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
+          -c "CREATE TABLE test (name char(25));"
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
+          -c "INSERT INTO test VALUES ('John'), ('Joanna'), ('Jennifer');"
