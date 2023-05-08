@@ -101,8 +101,8 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.14
+      # - setup_remote_docker:
+      #     version: 20.10.14
       - run: sudo apt-get update
       - run: sudo apt-get install postgresql-client
 
