@@ -1,6 +1,13 @@
 version: 2
 jobs:
+
   build:
+    environment:
+      DJANGO_SECRET_KEY: 'hof@xh$dz#p!#czh53r#t^2t)ydmtkqgy+*_kf=58)8(oz1n)^'
+      DB_NAME: 'test_ml_project'
+      DB_USER: 'test_ml'
+      DB_PASSWORD: '1234567'
+
     docker:
       - image: cimg/python:3.11.3
     steps:
@@ -21,6 +28,16 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+      - run:
+          name: Set up environment
+          command: |
+            # Install PostgreSQL client
+            sudo apt-get install -y postgresql-client
+
+            # Set up database
+            psql -c "CREATE DATABASE $DB_NAME;" -U postgres
+            psql -c "CREATE USER $DB_USER WITH PASSWORD '$DB_PASSWORD';" -U postgres
+            psql -c "GRANT ALL PRIVILEGES ON DATABASE $DB_NAME TO $DB_USER;" -U postgres
 
       - run:
           name: Running tests
