@@ -12,9 +12,11 @@ jobs:
 
     docker:
       - image: cimg/python:3.11.3
+      - image: cimg/postgres:15.2.0
         environment:
           POSTGRES_USER: 'test_ml'
           POSTGRES_PASSWORD: '1234567'
+          POSTGRES_DB: 'test_ml_project'
     
     services:
       - postgres
@@ -39,11 +41,11 @@ jobs:
             pip install --upgrade pip
             pip install -r requirements.txt
       
-      - run:
-          name: Start PostgreSQL service
-          command: |
-            docker run -d --name postgres-db -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5432:5432 postgres:14
-            sleep 5  # Wait for PostgreSQL to start
+      # - run:
+      #     name: Start PostgreSQL service
+      #     command: |
+      #       docker run -d --name postgres-db -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -p 5432:5432 postgres:14
+      #       sleep 5  # Wait for PostgreSQL to start
       
       - run:
           name: Set up environment
