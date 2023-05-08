@@ -80,7 +80,6 @@ version: 2.1
 
 jobs:
   build:
-
     # Primary container image where all commands run
     docker:
       - image: cimg/python:3.11.3
@@ -91,7 +90,15 @@ jobs:
           POSTGRES_DB: postgresql://postgres@localhost/circle_test
         auth:
           username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var
+          
+      - image: circleci/postgres:9.6
+        environment:
+          PGHOST: localhost
+          PGUSER: circleci
+          POSTGRES_USER: circleci
+          POSTGRES_DB: circle_test
+          POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
       - setup_remote_docker:
