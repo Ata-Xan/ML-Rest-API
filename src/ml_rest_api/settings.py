@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': 5432,
     },
     'test': {
@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'test_ml_project',  # Make sure this value is set correctly
         'USER': 'test_ml',
         'PASSWORD': '1234567',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
