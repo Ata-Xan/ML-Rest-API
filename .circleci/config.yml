@@ -1,7 +1,7 @@
 version: 2
 jobs:
-
   build:
+    
     # environment:
     #   DJANGO_SECRET_KEY: 'hof@xh$dz#p!#czh53r#t^2t)ydmtkqgy+*_kf=58)8(oz1n)^'
     #   DB_NAME: 'test_ml_project'
@@ -26,8 +26,7 @@ jobs:
 
     steps:
       - checkout
-      - python/load-cache
-      
+
       - run:
           name: Wait for db to run
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
