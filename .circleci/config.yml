@@ -92,14 +92,6 @@ jobs:
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
-
-    # services:
-    #   - name: postgres
-    #     environment:
-    #       POSTGRES_USER: myuser
-    #       POSTGRES_PASSWORD: mypassword
-    #       POSTGRES_DB: mydatabase
-
     steps:
       - checkout
       - run: sudo apt-get update
@@ -108,6 +100,11 @@ jobs:
       - run:
           name: Install apt-utils
           command: sudo apt-get update && sudo apt-get install -y apt-utils
+      
+      - run:
+          name: Start PostgreSQL container
+          command: |
+            docker run -d --name postgres-container -e POSTGRES_USER=$POSTGRES_USER -e POSTGRES_PASSWORD=$POSTGRES_PASSWORD -e POSTGRES_DB=$POSTGRES_DB -p 5432:5432 postgres:14
 
       - restore_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
