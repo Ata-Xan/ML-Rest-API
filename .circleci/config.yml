@@ -91,7 +91,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
 
     # Service container image
-      - image: cimg/postgres:15.2.0
+      - image: circleci/postgres:15.2.0
         environment:
           POSTGRES_USER: postgres
         auth:
