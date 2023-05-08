@@ -92,7 +92,7 @@ jobs:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var
           
-      - image: cimg/postgres:15.2.0
+      - image: circleci/postgres:15.2.0
         environment:
           PGHOST: localhost
           PGUSER: circleci
