@@ -11,7 +11,9 @@ jobs:
       DB_PORT: '5432'
 
     docker:
+      - image: cimg/postgres:15.2.0
       - image: cimg/python:3.11.3
+
     steps:
       - checkout
 
