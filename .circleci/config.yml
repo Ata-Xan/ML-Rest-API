@@ -87,7 +87,7 @@ jobs:
           # TEST_DATABASE_URL: postgresql://postgres@localhost/circle_test
           # POSTGRES_USER: myuser
           # POSTGRES_PASSWORD: mypassword
-          POSTGRES_DB: postgresql://postgres@localhost/circle_test
+          POSTGRES_DB: circle_test
         auth:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var
