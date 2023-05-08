@@ -139,13 +139,6 @@ jobs:
       - store_artifacts:
           path: test-reports/
           destination: python_app
-          
-    services:
-      - name: postgres
-        environment:
-          POSTGRES_USER: myuser
-          POSTGRES_PASSWORD: mypassword
-          POSTGRES_DB: mydatabase
       
 
 
