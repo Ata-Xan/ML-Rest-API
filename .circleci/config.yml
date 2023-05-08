@@ -85,8 +85,8 @@ jobs:
       - image: cimg/python:3.11.3
         environment:
           # TEST_DATABASE_URL: postgresql://postgres@localhost/circle_test
-          POSTGRES_USER: myuser
-          POSTGRES_PASSWORD: mypassword
+          # POSTGRES_USER: myuser
+          # POSTGRES_PASSWORD: mypassword
           POSTGRES_DB: postgresql://postgres@localhost/circle_test
         auth:
           username: mydockerhub-user
