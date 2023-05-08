@@ -16,7 +16,7 @@ jobs:
           ENV: CIRCLE
           DATABASE_URL: postgresql://circleci@localhost/circle_test
 
-      - image: cimg/postgres
+      - image: circleci/postgres
         environment:
           PGHOST: localhost
           PGUSER: circleci
