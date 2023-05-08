@@ -20,9 +20,12 @@ jobs:
         environment:
           PGHOST: localhost
           PGUSER: circleci
-          POSTGRES_USER: circleci
-          POSTGRES_DB: circle_test
+          DB_USER: circleci
+          DB_PASSWORD: '1234567'
+          DB_NAME: circle_test
           POSTGRES_HOST_AUTH_METHOD: trust
+          DB_HOST: 127.0.0.1
+          DB_PORT: '5432'
 
     steps:
       - checkout
