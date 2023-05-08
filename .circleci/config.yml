@@ -1,3 +1,4 @@
+version: 2
 jobs:
   build:
     docker:
@@ -5,3 +6,6 @@ jobs:
     steps:
       - checkout
       - run: python --version
+      - run:
+          name: Install apt-utils
+          command: sudo apt-get update && sudo apt-get install -y apt-utils
