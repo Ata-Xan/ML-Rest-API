@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'test_ml_project',  # Make sure this value is set correctly
         'USER': 'test_ml',
         'PASSWORD': '1234567',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
