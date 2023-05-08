@@ -33,7 +33,13 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r requirements.
+      
+      - run:
+          name: Start PostgreSQL service
+          command: |
+            service postgresql start
+            sleep 5  # Wait for PostgreSQL to start
       
       - run:
           name: Set up environment
