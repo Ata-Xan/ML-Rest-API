@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'team_manager',
 ]
 
@@ -81,7 +82,7 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
         'PORT': 5432,
     },
     'test': {
@@ -89,7 +90,7 @@ DATABASES = {
         'NAME': 'test_ml_project',  # Make sure this value is set correctly
         'USER': 'test_ml',
         'PASSWORD': '1234567',
-        'HOST': '127.0.0.1',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -113,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+AUTH_USER_MODEL = "team_manager.User" 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
