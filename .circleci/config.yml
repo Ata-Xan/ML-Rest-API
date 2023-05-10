@@ -13,6 +13,7 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var
           
       - image: cimg/postgres:14.0
+        name: db
         environment:
           PGHOST: cimg-postgres
           PGUSER: circleci
