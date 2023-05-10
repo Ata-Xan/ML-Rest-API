@@ -14,7 +14,7 @@ jobs:
           
       - image: cimg/postgres:14.0
         environment:
-          PGHOST: localhost
+          PGHOST: db
           PGUSER: circleci
           POSTGRES_USER: circleci
           POSTGRES_DB: circle_test
