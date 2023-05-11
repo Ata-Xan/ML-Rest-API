@@ -73,6 +73,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ml_rest_api.wsgi.application'
 TEST_DATABASE_PREFIX = 'test_'
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
