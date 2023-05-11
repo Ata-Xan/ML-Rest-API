@@ -65,7 +65,7 @@ jobs:
           command: |
             . venv/bin/activate
             cd src
-            python manage.py
+            python manage.py test
 
       - store_artifacts:
           path: test-reports/
