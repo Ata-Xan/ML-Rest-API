@@ -51,6 +51,13 @@ jobs:
           command: |
             . venv/bin/activate
             python src/manage.py migrate
+      
+      - run:
+          name: structure
+          command: |
+            ls src/
+            cat src/team_manager/tests.py
+
         
       - run:
           name: Running tests
