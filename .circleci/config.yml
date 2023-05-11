@@ -53,18 +53,18 @@ jobs:
             . venv/bin/activate
             python src/manage.py migrate
       
-      - run:
-          name: structure
-          command: |
-            ls src/
-            cat src/team_manager/tests.py
+      # - run:
+      #     name: structure
+      #     command: |
+      #       ls src/
+      #       cat src/team_manager/tests.py
 
         
       - run:
           name: Running tests
           command: |
             . venv/bin/activate
-            python src/manage.py test
+            python src/manage.py test team_manager
 
       - store_artifacts:
           path: test-reports/
