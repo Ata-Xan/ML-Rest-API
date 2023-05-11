@@ -2,7 +2,7 @@
 version: 2.1
 
 jobs:
-  build:
+  tests:
     # Primary container image where all commands run
     docker:
       - image: cimg/python:3.11.3
@@ -59,6 +59,10 @@ jobs:
       - store_artifacts:
           path: test-reports/
           destination: python_app
+workflows:
+  main:
+    jobs:
+      - tests
       
 
 
