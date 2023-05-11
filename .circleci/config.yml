@@ -43,7 +43,9 @@ jobs:
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
-            - "venv"
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.6/site-packages"
       - run:
           name: Run database migrations
           command: |
@@ -52,9 +54,7 @@ jobs:
         
       - run:
           name: Running tests
-          command: |
-            . venv/bin/activate
-            python src/manage.py test
+          command: python src/manage.py test
 
       - store_artifacts:
           path: test-reports/
