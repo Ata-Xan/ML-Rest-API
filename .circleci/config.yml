@@ -1,77 +1,26 @@
-
-version: 2.1
-
+version: 2
 jobs:
-  build-and-test:
-    # Primary container image where all commands run
+  build:
     docker:
-      - image: cimg/python:3.11.3
-        environment:
-          POSTGRES_DB: circle_test
-        auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD  # context / project UI env-var
-          
-      - image: cimg/postgres:14.0
-        name: db
-        environment:
-          PGHOST: cimg-postgres
-          PGUSER: circleci
-          POSTGRES_USER: circleci
-          POSTGRES_DB: circle_test
-          POSTGRES_HOST_AUTH_METHOD: trust
+      - image: circleci/python:3.6
     steps:
       - checkout
-      - run: sudo apt-get update
-      - run: sudo apt-get install postgresql-client
-
-      - run:
-          name: Install apt-utils
-          command: sudo apt-get update && sudo apt-get install -y apt-utils
-
       - restore_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
-
       - run:
-          name: Install dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install --upgrade pip
             pip install -r requirements.txt
-
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements.txt" }}
           paths:
-            - ".venv"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.6/site-packages"
-      - run:
-          name: Run database migrations
-          command: |
-            . venv/bin/activate
-            python src/manage.py migrate
-      
-      - run:
-          name: structure
-          command: |
-            ls src/
-            cat src/team_manager/tests.py
-
-        
+            - "venv"
       - run:
           name: Running tests
           command: |
             . venv/bin/activate
-            python src/manage.py test
-
+            python3 src/manage.py test
       - store_artifacts:
           path: test-reports/
           destination: python_app
-workflows:
-  main:
-    jobs:
-      - build-and-test
-      
-
-
