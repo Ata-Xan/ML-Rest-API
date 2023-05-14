@@ -20,6 +20,7 @@ RUN apt-get update && \
 
 # install requirements
 RUN pip install --upgrade pip
+RUN pip install django-filter
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
