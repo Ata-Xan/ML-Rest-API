@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'team_manager',
+    'rest_framework.authtoken',
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -72,6 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ml_rest_api.wsgi.application'
 TEST_DATABASE_PREFIX = 'test_'
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -93,6 +96,22 @@ DATABASES = {
         'HOST': 'db',
         'PORT': '5432',
     }
+}
+
+# setting specifies the authentication backend to use
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+# have specified 'rest_framework.authentication.SessionAuthentication' as the 
+# default authentication class for Django REST framework.
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
 }
 
 
