@@ -1,3 +1,4 @@
+import json
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import  AccessToken, RefreshToken
 from django.test import TestCase
@@ -28,8 +29,7 @@ class RegistrationTestCase(CoreTestCase):
             'email': 'test2@example.com',
             'password': 'password123',
         }
-        
-        response = self.client.post(self.register_url, new_user, format='json')
+        response = self.client.post(self.register_url, new_user ,format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(User.objects.count(), 2)
 
@@ -59,6 +59,36 @@ class LoginTestCase(CoreTestCase):
 
         # Ensure the access token is valid for the user
         self.assertEqual(user_id, self.user.id)
+    
+    def test_register_login(self):
+        # register a user
+        new_user = {
+            'email': 'test2@example.com',
+            'password': 'password123',
+        }
+        
+        response = self.client.post(self.register_url, new_user, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(User.objects.count(), 2)
+
+
+        # Get the created user from the database
+        registered_user = User.objects.get(email=new_user['email'])
+        # print(registered_user)
+        # Assert that the user exists in the database
+        self.assertIsNotNone(registered_user)
+        
+        # Assert that the user's password is correctly stored
+        self.assertTrue(registered_user.check_password(new_user['password']))
+
+        #login with the registered user
+
+        response = self.client.post(self.login_url, new_user, format='json')
+        print(response.content)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('refresh', response.data)
+        self.assertIn('access', response.data)
+
     
     def test_login_with_invalid_credentials(self):
         credentials = {

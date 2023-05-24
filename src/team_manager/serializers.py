@@ -18,7 +18,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'email', 'refresh', 'access']
+        fields = ['id', 'email','password', 'refresh', 'access']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def get_refresh(self, obj):
         refresh = RefreshToken.for_user(obj)
@@ -27,6 +28,14 @@ class UserSerializer(serializers.ModelSerializer):
     def get_access(self, obj):
         refresh = RefreshToken.for_user(obj)
         return str(refresh.access_token)
+    
+    def create(self, validated_data):
+        print("validated_data", validated_data)
+        password = validated_data.pop('password')
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user
 
 
 
