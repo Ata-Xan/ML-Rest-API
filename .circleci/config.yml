@@ -54,8 +54,7 @@ jobs:
           name: cd and ls
           command: |
             . venv/bin/activate
-            cd src/
-            ls
+            less src/team_manager/tests.py
         
       - run:
           name: Running tests
