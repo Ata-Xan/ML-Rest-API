@@ -1,11 +1,23 @@
 from django.db import models
-
-# Create your models here.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
+from team_manager.managers import UserManager
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class User(AbstractUser):
-    pass
+    email = models.EmailField(_('email address'), unique=True)
+    username = None
+    objects = UserManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['password']
+
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return{
+            'refresh':str(refresh),
+            'access':str(refresh.access_token)
+        }
 
 class Team(models.Model):
     name = models.CharField(max_length=255)
