@@ -49,6 +49,13 @@ jobs:
           command: |
             . venv/bin/activate
             python3 src/manage.py migrate
+      
+      - run:
+          name: cd and ls
+          command: |
+            . venv/bin/activate
+            cd src/
+            ls
         
       - run:
           name: Running tests
