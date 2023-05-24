@@ -51,12 +51,6 @@ jobs:
             python3 src/manage.py migrate
       
       - run:
-          name: cd and ls
-          command: |
-            . venv/bin/activate
-            cat src/team_manager/tests.py
-        
-      - run:
           name: Running tests
           command: |
             . venv/bin/activate
