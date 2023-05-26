@@ -1,11 +1,23 @@
 
 from rest_framework import views, viewsets, status
+from django_filters import rest_framework as filters
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
-from .models import User
-from .serializers import UserSerializer
+from rest_framework.viewsets import ViewSet
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.exceptions import AuthenticationFailed
+from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+from team_manager.filters import CurrentUserFilterBackend, TeamFilter
+from team_manager.permissions import IsMemberOfTheTeam
+from .models import Membership, Team, User
+from .serializers import MembershipSerializer, TeamSerializer, UserSerializer
+
 
 class RegistrationViewSet(viewsets.ViewSet):
     def create(self, request):
@@ -26,7 +38,6 @@ class RegistrationViewSet(viewsets.ViewSet):
         )
 
 class LoginViewSet(viewsets.ViewSet):
-    
 
     def create(self, request):
         if request.user.is_authenticated:
@@ -67,42 +78,68 @@ class LogoutViewSet(viewsets.ViewSet):
         token.blacklist()
         return Response(status=status.HTTP_205_RESET_CONTENT)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# logger = logging.getLogger(__name__)
 # class BaseViewSet(viewsets.ModelViewSet):
 #     permission_classes = [IsAuthenticated, IsMemberOfTheTeam]
-#     authentication_classes = [SessionAuthentication]
+    # authentication_classes = [SessionAuthentication]
+    # filter_backends = [DjangoFilterBackend]
+
+class UserViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
+    filter_backends=[CurrentUserFilterBackend]
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+user_viewset = UserViewSet.as_view({'get':'list'})
+
+# class TeamViewSet(BaseViewSet):
+#     queryset = Team.objects.all()
+#     filterset_class = TeamFilter
+#     serializer_class = TeamSerializer
+#     # authentication_classes = [SessionAuthentication]
+#     permission_classes = [IsAuthenticated]
+#     filterset_class = TeamFilter
+    
+# teams_list = TeamViewSet.as_view({'get':'list'})
+
+# class MembershipViewSet(viewsets.ModelViewSet):
+#     # authentication_classes = [SessionAuthentication]
+#     permission_classes = [IsAuthenticated]
+#     queryset = Membership.objects.all()
+#     serializer_class = MembershipSerializer
 #     # filter_backends = [DjangoFilterBackend]
+
+# memberships_list = MembershipViewSet.as_view({'get':'list'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # logger = logging.getLogger(__name__)
+
 
 
 
@@ -190,25 +227,4 @@ class LogoutViewSet(viewsets.ViewSet):
 #         return HttpResponse('Successfully registered')
 
 
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
 
-# class TeamViewSet(BaseViewSet):
-#     queryset = Team.objects.all()
-#     filterset_class = TeamFilter
-#     serializer_class = TeamSerializer
-#     authentication_classes = [SessionAuthentication]
-#     permission_classes = [IsAuthenticated]
-#     filterset_class = TeamFilter
-    
-# teams_list = TeamViewSet.as_view({'get':'list'})
-
-# class MembershipViewSet(viewsets.ModelViewSet):
-#     authentication_classes = [SessionAuthentication]
-#     permission_classes = [IsAuthenticated]
-#     queryset = Membership.objects.all()
-#     serializer_class = MembershipSerializer
-#     filter_backends = [DjangoFilterBackend]
-
-# memberships_list = MembershipViewSet.as_view({'get':'list'})
