@@ -13,7 +13,7 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from team_manager.filters import CurrentUserFilterBackend, TeamFilter
+from team_manager.filters import CurrentUserFilterBackend, MembershipFilter, TeamFilter
 from team_manager.permissions import IsMemberOfTheTeam
 from .models import Membership, Team, User
 from .serializers import MembershipSerializer, TeamSerializer, UserSerializer
@@ -91,24 +91,27 @@ class UserViewSet(viewsets.ModelViewSet):
 
 user_viewset = UserViewSet.as_view({'get':'list'})
 
-# class TeamViewSet(BaseViewSet):
-#     queryset = Team.objects.all()
-#     filterset_class = TeamFilter
-#     serializer_class = TeamSerializer
-#     # authentication_classes = [SessionAuthentication]
-#     permission_classes = [IsAuthenticated]
-#     filterset_class = TeamFilter
+class TeamViewSet(viewsets.ModelViewSet):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
     
-# teams_list = TeamViewSet.as_view({'get':'list'})
+    # authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated, IsMemberOfTheTeam]
+    filter_backends=[TeamFilter]
 
-# class MembershipViewSet(viewsets.ModelViewSet):
-#     # authentication_classes = [SessionAuthentication]
-#     permission_classes = [IsAuthenticated]
-#     queryset = Membership.objects.all()
-#     serializer_class = MembershipSerializer
-#     # filter_backends = [DjangoFilterBackend]
+    
+team_viewset = TeamViewSet.as_view({'get':'list'})
+
+class MembershipViewSet(viewsets.ModelViewSet):
+    # authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated, IsMemberOfTheTeam]
+    queryset = Membership.objects.all()
+    serializer_class = MembershipSerializer
+    filter_backends=[MembershipFilter]
 
 # memberships_list = MembershipViewSet.as_view({'get':'list'})
+
+
 
 
 

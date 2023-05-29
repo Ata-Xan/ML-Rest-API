@@ -12,32 +12,32 @@ class CurrentUserFilterBackend(DjangoFilterBackend):
         return queryset.filter(id=user.id)
 
 
-class TeamFilter(FilterSet):
+class TeamFilter(filters.BaseFilterBackend):
     user = ModelChoiceFilter(queryset=get_user_model().objects.all())
 
     class Meta:
         model = Team
         fields = ['name']
 
-    def filter_queryset(self, queryset):
-        queryset = super().filter_queryset(queryset)
-        user = self.request.user
+    def filter_queryset(self, request, queryset, view):
+        # queryset = super().filter_queryset(request, queryset, view)
+        user = request.user
         queryset = queryset.filter(membership__user=user).distinct()
         return queryset
 
 
-class MembershipFilter(FilterSet):
-    user = ModelChoiceFilter(queryset=User.objects.all())
+class MembershipFilter(DjangoFilterBackend):
+    user = ModelChoiceFilter(queryset=get_user_model().objects.all())
 
     class Meta:
         model = Membership
         fields = ['user']
 
-    def filter_queryset(self, queryset):
-        queryset = super().filter_queryset(queryset)
-        user = self.request.user
-        if user.is_authenticated:
-            queryset = queryset.filter(user=user)
+    def filter_queryset(self, request, queryset, view):
+        # queryset = super().filter_queryset(queryset)
+        user = request.user
+        queryset = queryset.filter(user=user)
+        print(queryset)
         return queryset
 
 

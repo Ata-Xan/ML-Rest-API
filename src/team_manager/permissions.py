@@ -11,10 +11,12 @@ class IsMemberOfTheTeam(BasePermission):
         user = request.user
         # print(view.action)
         if view.action in drf_actions:
+            # print(view.action)
             
             team_id = view.kwargs.get('pk')
             team = Team.objects.get(pk=team_id)
             user_role = Membership.objects.filter(user=user, team=team).values('role')
+            print("role: ",user_role)
             # print(user_role)
             # to check if the user got any membership at all
             # if view.action in action_role_manager_needed:
@@ -25,4 +27,6 @@ class IsMemberOfTheTeam(BasePermission):
                 return False           
             # print(view.action,user_role)
             return Membership.objects.filter(user=request.user, team=team).exists()
-        return True
+        else:
+        # print("View.aciton: ",view.action)
+            return True
